@@ -52,15 +52,20 @@ export class CarsService {
     return newCar;
   }
 
-  update(id: string, updateCarDto) {
+  update(id: string, updateCarDto: UpdateCarDto) {
     let carDB = this.findCarById(id);
 
     if (carDB && this.cars) {
-      this.cars = this.cars.map((car) => {
+      const existing = carDB;
+      this.cars = this.cars.map((car): Car => {
         if (car.id === id) {
-          carDB = { ...carDB, ...updateCarDto, id };
-
-          return carDB;
+          const merged: Car = {
+            id: existing.id,
+            brand: updateCarDto.brand ?? existing.brand,
+            model: updateCarDto.model ?? existing.model,
+          };
+          carDB = merged;
+          return merged;
         }
         return car;
       });
