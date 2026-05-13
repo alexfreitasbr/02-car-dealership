@@ -7,11 +7,11 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class BrandsService {
   private brands: Brand[] = [
-    {
-      id: uuid(),
-      name: 'Toyota',
-      createAt: new Date().getTime(),
-    },
+    // {
+    //   id: uuid(),
+    //   name: 'Toyota',
+    //   createAt: new Date().getTime(),
+    // },
   ];
 
   create(createBrandDto: CreateBrandDto) {
@@ -47,12 +47,16 @@ export class BrandsService {
   }
 
   remove(id: string) {
-    const brandDB = this.findOne(id);
+    if (this.findOne(id)) {
+      this.brands = this.brands.filter((brand) => {
+        if (brand.id !== id) {
+          return brand;
+        }
+      });
+    }
+  }
 
-    this.brands = this.brands.filter((brand) => {
-      if (brand.id !== id) {
-        return brand;
-      }
-    });
+  fillWithBrands(brands: Brand[]) {
+    this.brands = brands;
   }
 }
